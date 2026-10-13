@@ -347,11 +347,11 @@ document.addEventListener("pointermove",function(e){
 document.addEventListener("pointerout",function(e){var b=e.target.closest&&e.target.closest(".btn");if(b&&!b.contains(e.relatedTarget)){b.style.removeProperty("--tx");b.style.removeProperty("--ty")}});
 
 function $(id){return document.getElementById(id)}
-var BANNER=String.raw`    _    _     _______  __  ____
-   / \  | |   | ____\ \/ / / ___|
-  / _ \ | |   |  _|  \  /  \___ \
- / ___ \| |___| |___ /  \   ___) |
-/_/   \_\_____|_____/_/\_\ |____/`.split("\n");
+var BANNER=String.raw`    _    _     _______  __        ____
+   / \  | |   | ____\ \/ /       / ___|
+  / _ \ | |   |  _|  \  /        \___ \
+ / ___ \| |___| |___ /  \   __    ___) |
+/_/   \_\_____|_____/_/\_\ |__|  |____/`.split("\n");
 function termHTML(){return "<h2 style=\"margin-top:72px\">Terminal</h2><p class=\"lede\">A small command line for this site. Type help, or tap a command.</p><div class=\"term\" id=\"term\"><div class=\"tbar\"><i></i><i></i><i></i><span>alex@portfolio</span></div><div class=\"tout\" id=\"tout\" role=\"log\" aria-live=\"polite\"></div><div class=\"tline\"><label for=\"tin\">alex@portfolio:~$</label><input id=\"tin\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\"></div></div><div class=\"chips\">"+["help","neofetch","projects","skills","matrix"].map(function(c){return "<button type=\"button\" class=\"chip\" data-c=\""+c+"\">"+c+"</button>"}).join("")+"</div>"}
 var CMDS={
  help:function(a,pr){["help        list commands","whoami      who I am","neofetch    system info","ls          list sections","projects    my projects","skills      my stack","journey     timeline","contact     get in touch","open <x>    go to a page or project","theme       invert colors","matrix      enter the matrix","clear       clear the screen"].forEach(function(l){pr(l)})},
