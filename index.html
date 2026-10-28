@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Alex S – AI Engineer & Full Stack Developer</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Caveat:wght@600&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<script src="public/three.min.js"></script>
+<script>window.THREE || document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>')</script>
 <style>
 :root{--bg:#fff;--surface:#fff;--ink:#000;--muted:#595959;--line:#c9c9c9;--accent:#000;--accent-ink:#fff;--signal:#8c8c8c;
 --display:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;--body:'Instrument Sans','Segoe UI',system-ui,sans-serif;
@@ -14,9 +16,13 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
 *,*::before,*::after{box-sizing:inherit}
 html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--body)}
+#yinyang-canvas{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;pointer-events:none;display:block}
+.bg-vignette{position:fixed;inset:0;width:100vw;height:100vh;z-index:1;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(0,0,0,0.02) 0%,rgba(0,0,0,0.38) 65%,rgba(0,0,0,0.82) 100%)}
+:root[data-theme="light"] .bg-vignette{background:radial-gradient(circle at 50% 50%,rgba(255,255,255,0.02) 0%,rgba(255,255,255,0.42) 65%,rgba(255,255,255,0.88) 100%)}
 a{color:inherit}
+*:focus{outline:none}
 :focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
-.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+.wrap{position:relative;z-index:2;max-width:1080px;margin:0 auto;padding:0 24px}
 header.nav{display:flex;justify-content:space-between;align-items:center;padding:22px 0}
 .logo{font:800 22px var(--display);text-decoration:none;letter-spacing:-.02em}
 nav a{margin-left:22px;text-decoration:none;color:var(--muted);font-weight:500;font-size:15px}
@@ -24,8 +30,9 @@ nav a:hover{color:var(--ink)}
 .tbtn{margin-left:22px;background:none;border:1px solid var(--line);color:var(--ink);border-radius:99px;padding:6px 14px;font:500 14px var(--body);cursor:pointer}
 @media(max-width:640px){nav a{display:none}.tbtn{margin-left:0}}
 .hero{padding:64px 0 56px}
-.hero h1{font:800 clamp(40px,7.4vw,84px)/1 var(--display);letter-spacing:-.035em;margin:0 0 24px;max-width:15ch}
-.hero p{max-width:56ch;color:var(--muted);font-size:20px;margin:0 0 32px}
+.hero h1{font:800 clamp(40px,7.4vw,84px)/1 var(--display);letter-spacing:-.035em;margin:0 0 24px;max-width:15ch;text-shadow:0 0 40px var(--bg),0 0 80px var(--bg)}
+.hero p{max-width:56ch;color:var(--muted);font-size:20px;margin:0 0 32px;text-shadow:0 0 30px var(--bg)}
+.role{font:700 clamp(18px,2.6vw,26px) var(--display);color:var(--accent);margin:0 0 14px;min-height:1.5em;text-shadow:0 0 25px var(--bg)}
 .btns{display:flex;gap:12px;flex-wrap:wrap}
 .btn{display:inline-block;padding:13px 24px;border-radius:99px;font-weight:600;text-decoration:none;border:2px solid var(--ink)}
 .btn.p{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
@@ -87,7 +94,7 @@ h2{font:800 clamp(30px,4.4vw,46px)/1.05 var(--display);letter-spacing:-.03em;mar
 footer{padding:0 0 40px;color:var(--muted);font-size:14px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 
-header.nav{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5;border-bottom:1px solid var(--line);margin:0 -24px;padding:16px 24px}
+header.nav{position:sticky;top:env(safe-area-inset-top,0px);background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:5;border-bottom:1px solid var(--line);margin:0 -24px;padding:16px 24px}
 nav a[aria-current="page"]{color:var(--ink);box-shadow:0 2px 0 var(--accent)}
 .page{padding:48px 0 72px;outline:none}
 .page>h1{font:800 clamp(36px,6vw,64px)/1 var(--display);letter-spacing:-.03em;margin:0 0 14px}
@@ -263,6 +270,8 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:30;opa
 </style>
 </head>
 <body>
+<canvas id="yinyang-canvas" aria-hidden="true"></canvas>
+<div class="bg-vignette" aria-hidden="true"></div>
 <div class="bar" id="bar"></div>
 <div class="wrap">
 <header class="nav">
@@ -301,35 +310,352 @@ var T={home:"Alex S – AI Engineer & Full Stack Developer",projects:"Projects",
 
 var RM=matchMedia("(prefers-reduced-motion:reduce)").matches;
 var MQ=["Python","PyTorch","TensorFlow","OpenCV","LLMs","RAG","React","Next.js","TypeScript","FastAPI","Flask","Node.js","PostgreSQL","Docker","Linux","Cyber Security"].map(function(t){return "<span>"+t+"</span>"}).join("");
-function net(){
-  var c=document.getElementById("net");if(!c||RM)return;
-  var x=c.getContext("2d"),w,h,d=window.devicePixelRatio||1,N=[],m={x:-999,y:-999};
-  function size(){var r=c.getBoundingClientRect();w=r.width;h=r.height;c.width=w*d;c.height=h*d;x.setTransform(d,0,0,d,0,0);
-    var n=Math.min(80,Math.floor(w*h/13000));N=[];for(var i=0;i<n;i++)N.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.45,vy:(Math.random()-.5)*.45})}
-  size();
-  window.addEventListener("resize",function(){if(document.body.contains(c))size()});
-  window.addEventListener("pointermove",function(e){var r=c.getBoundingClientRect();m.x=e.clientX-r.left;m.y=e.clientY-r.top});
-  function loop(){
-    if(!document.body.contains(c))return;
-    var st=getComputedStyle(document.documentElement),A=st.getPropertyValue("--accent").trim(),S=st.getPropertyValue("--signal").trim();
-    x.clearRect(0,0,w,h);
-    N.forEach(function(p){
-      var dx=m.x-p.x,dy=m.y-p.y,dm=Math.sqrt(dx*dx+dy*dy);
-      if(dm<170&&dm>1){p.vx+=dx/dm*.012;p.vy+=dy/dm*.012}
-      p.vx*=.995;p.vy*=.995;
-      var sp=Math.sqrt(p.vx*p.vx+p.vy*p.vy);if(sp>.9){p.vx*=.9/sp;p.vy*=.9/sp}
-      p.x+=p.vx;p.y+=p.vy;
-      if(p.x<0||p.x>w)p.vx*=-1;if(p.y<0||p.y>h)p.vy*=-1;
-    });
-    x.lineWidth=1;x.strokeStyle=A;
-    for(var i=0;i<N.length;i++)for(var j=i+1;j<N.length;j++){
-      var a=N[i],b=N[j],dx=a.x-b.x,dy=a.y-b.y,q=dx*dx+dy*dy;
-      if(q<15000){x.globalAlpha=(1-q/15000)*.4;x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.stroke()}
-    }
-    N.forEach(function(p){var near=Math.hypot(m.x-p.x,m.y-p.y)<110;x.globalAlpha=near?1:.55;x.fillStyle=near?S:A;x.beginPath();x.arc(p.x,p.y,near?3.2:2.2,0,6.283);x.fill()});
-    x.globalAlpha=1;requestAnimationFrame(loop);
+function init3DYinYangBackground(){
+  if(typeof THREE==='undefined'){
+    console.warn('Three.js not loaded, retrying...');
+    setTimeout(init3DYinYangBackground,300);
+    return;
   }
-  loop();
+  var canvas=document.getElementById('yinyang-canvas');
+  if(!canvas)return;
+
+  var scene=new THREE.Scene();
+  var camera=new THREE.PerspectiveCamera(45,innerWidth/innerHeight,0.1,100);
+  camera.position.set(0,0,7.8);
+
+  var renderer=new THREE.WebGLRenderer({
+    canvas:canvas,
+    antialias:true,
+    alpha:true,
+    powerPreference:'high-performance'
+  });
+  renderer.setSize(innerWidth,innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure=1.15;
+
+  // Cinematic lighting setup
+  var ambientLight=new THREE.AmbientLight(0x22222a,1.2);
+  scene.add(ambientLight);
+
+  var keyLight=new THREE.DirectionalLight(0xffffff,2.8);
+  keyLight.position.set(5,7,7);
+  scene.add(keyLight);
+
+  var rimLight=new THREE.DirectionalLight(0xcce2ff,2.6);
+  rimLight.position.set(-6,-5,4);
+  scene.add(rimLight);
+
+  var backRim=new THREE.DirectionalLight(0xa5c5f0,2.0);
+  backRim.position.set(-4,4,-6);
+  scene.add(backRim);
+
+  var fillLight=new THREE.DirectionalLight(0x7588a5,1.0);
+  fillLight.position.set(0,-6,4);
+  scene.add(fillLight);
+
+  var centerLight=new THREE.PointLight(0xffffff,1.5,14);
+  centerLight.position.set(0,0,3);
+  scene.add(centerLight);
+
+  // 1. Central 3D Yin-Yang Geometry
+  var R=1.68,R_mid=R/2,r_dot=0.28,depth=0.30,bevelThickness=0.065;
+  var totalThickness=depth+bevelThickness*2;
+
+  var shape=new THREE.Shape();
+  shape.moveTo(0,-R);
+  shape.absarc(0,0,R,-Math.PI/2,Math.PI/2,false);
+  shape.absarc(0,R_mid,R_mid,Math.PI/2,3*Math.PI/2,false);
+  shape.absarc(0,-R_mid,R_mid,Math.PI/2,-Math.PI/2,true);
+
+  var hole=new THREE.Path();
+  hole.absarc(0,R_mid,r_dot,0,Math.PI*2,true);
+  shape.holes.push(hole);
+
+  var extrudeSettings={
+    depth:depth,
+    bevelEnabled:true,
+    bevelSegments:6,
+    steps:1,
+    bevelSize:0.065,
+    bevelThickness:bevelThickness,
+    curveSegments:48
+  };
+
+  var swirlGeom=new THREE.ExtrudeGeometry(shape,extrudeSettings);
+  swirlGeom.translate(0,0,-totalThickness/2);
+  swirlGeom.computeVertexNormals();
+
+  var whiteMat=new THREE.MeshStandardMaterial({
+    color:0xf5f6fa,
+    roughness:0.22,
+    metalness:0.18
+  });
+
+  var blackMat=new THREE.MeshStandardMaterial({
+    color:0x0c0d10,
+    roughness:0.28,
+    metalness:0.58
+  });
+
+  var symbolGroup=new THREE.Group();
+
+  var whiteSwirl=new THREE.Mesh(swirlGeom,whiteMat);
+  symbolGroup.add(whiteSwirl);
+
+  var blackSwirl=new THREE.Mesh(swirlGeom,blackMat);
+  blackSwirl.rotation.z=Math.PI;
+  symbolGroup.add(blackSwirl);
+
+  // Dots
+  var dotGeom=new THREE.CylinderGeometry(r_dot-0.015,r_dot-0.015,totalThickness+0.02,32);
+  dotGeom.rotateX(Math.PI/2);
+
+  var blackDot=new THREE.Mesh(dotGeom,blackMat);
+  blackDot.position.set(0,R_mid,0);
+  symbolGroup.add(blackDot);
+
+  var whiteDot=new THREE.Mesh(dotGeom,whiteMat);
+  whiteDot.position.set(0,-R_mid,0);
+  symbolGroup.add(whiteDot);
+
+  // Metallic outer bezel rim
+  var rimGeom=new THREE.TorusGeometry(R+0.05,0.075,20,96);
+  var rimMat=new THREE.MeshStandardMaterial({
+    color:0xd6d8e0,
+    roughness:0.14,
+    metalness:0.92
+  });
+  symbolGroup.add(new THREE.Mesh(rimGeom,rimMat));
+
+  // Outer glowing halo
+  var haloGeom=new THREE.TorusGeometry(R+0.11,0.025,16,80);
+  var haloMat=new THREE.MeshBasicMaterial({
+    color:0xffffff,
+    transparent:true,
+    opacity:0.45,
+    blending:THREE.AdditiveBlending
+  });
+  symbolGroup.add(new THREE.Mesh(haloGeom,haloMat));
+
+  // Root Yin-Yang group (for tilts, parallax and floating)
+  var yinYangRoot=new THREE.Group();
+  yinYangRoot.add(symbolGroup);
+  scene.add(yinYangRoot);
+
+  // 2. Animated 3D Orbital Rings (Multi-axis Gyroscopic)
+  var ringsGroup=new THREE.Group();
+  scene.add(ringsGroup);
+
+  var ringConfigs=[
+    {radius:2.25,tube:0.015,rotX:1.15,rotY:0.35,rotZ:0.2,speed:0.35,dir:1,color:0xffffff,opacity:0.65},
+    {radius:2.85,tube:0.016,rotX:0.55,rotY:1.25,rotZ:-0.4,speed:0.25,dir:-1,color:0xd5e5ff,opacity:0.55},
+    {radius:3.50,tube:0.015,rotX:-0.85,rotY:0.45,rotZ:0.9,speed:0.18,dir:1,color:0xe8ecf5,opacity:0.45},
+    {radius:4.25,tube:0.013,rotX:0.95,rotY:-0.75,rotZ:-0.6,speed:0.12,dir:-1,color:0xffffff,opacity:0.38}
+  ];
+
+  var orbitalRings=[];
+  var ringOrbs=[];
+
+  ringConfigs.forEach(function(cfg,idx){
+    var rGroup=new THREE.Group();
+    rGroup.rotation.set(cfg.rotX,cfg.rotY,cfg.rotZ);
+
+    var rGeom=new THREE.TorusGeometry(cfg.radius,cfg.tube,16,120);
+    var rMat=new THREE.MeshBasicMaterial({
+      color:cfg.color,
+      transparent:true,
+      opacity:cfg.opacity,
+      blending:THREE.AdditiveBlending
+    });
+    rGroup.add(new THREE.Mesh(rGeom,rMat));
+
+    // Glowing satellite bead traveling along each ring
+    var orbGeom=new THREE.SphereGeometry(0.055,16,16);
+    var orbMat=new THREE.MeshBasicMaterial({
+      color:0xffffff,
+      blending:THREE.AdditiveBlending
+    });
+    var orb=new THREE.Mesh(orbGeom,orbMat);
+    rGroup.add(orb);
+
+    ringsGroup.add(rGroup);
+    orbitalRings.push({group:rGroup,config:cfg});
+    ringOrbs.push({mesh:orb,radius:cfg.radius,speed:cfg.speed*1.8*cfg.dir,angle:idx*1.5});
+  });
+
+  // Floating metallic accent spheres
+  var metallicOrbsGroup=new THREE.Group();
+  scene.add(metallicOrbsGroup);
+  var floatingOrbs=[];
+  var orbMetallicMat=new THREE.MeshStandardMaterial({
+    color:0xcccccc,
+    roughness:0.12,
+    metalness:0.92
+  });
+
+  for(var o=0;o<8;o++){
+    var oRadius=0.045+Math.random()*0.07;
+    var oMesh=new THREE.Mesh(new THREE.SphereGeometry(oRadius,18,18),orbMetallicMat);
+    var dist=2.4+Math.random()*2.8;
+    var oAngle=(o/8)*Math.PI*2+Math.random();
+    var oY=(Math.random()-0.5)*2.5;
+    oMesh.position.set(Math.cos(oAngle)*dist,oY,Math.sin(oAngle)*dist);
+    metallicOrbsGroup.add(oMesh);
+    floatingOrbs.push({
+      mesh:oMesh,
+      dist:dist,
+      angle:oAngle,
+      speed:(0.15+Math.random()*0.25)*(Math.random()>0.5?1:-1),
+      baseY:oY,
+      floatSpeed:0.8+Math.random()*1.2,
+      phase:Math.random()*Math.PI*2
+    });
+  }
+
+  // 3. Particle Starfield / Galaxy Vortex
+  function createParticleTexture(){
+    var cv=document.createElement('canvas');
+    cv.width=64;cv.height=64;
+    var c=cv.getContext('2d');
+    var grad=c.createRadialGradient(32,32,0,32,32,32);
+    grad.addColorStop(0,'rgba(255,255,255,1)');
+    grad.addColorStop(0.25,'rgba(235,245,255,0.7)');
+    grad.addColorStop(0.6,'rgba(200,220,255,0.2)');
+    grad.addColorStop(1,'rgba(200,220,255,0)');
+    c.fillStyle=grad;
+    c.fillRect(0,0,64,64);
+    return new THREE.CanvasTexture(cv);
+  }
+
+  var particleCount=1400;
+  var particlePositions=new Float32Array(particleCount*3);
+
+  for(var i=0;i<particleCount;i++){
+    var radius=2.2+Math.random()*14.0;
+    var theta=Math.random()*Math.PI*2;
+    var phi=Math.acos(Math.random()*2-1);
+    particlePositions[i*3]=radius*Math.sin(phi)*Math.cos(theta);
+    particlePositions[i*3+1]=radius*Math.sin(phi)*Math.sin(theta)*0.6;
+    particlePositions[i*3+2]=radius*Math.cos(phi);
+  }
+
+  var particleGeom=new THREE.BufferGeometry();
+  particleGeom.setAttribute('position',new THREE.BufferAttribute(particlePositions,3));
+
+  var particleMat=new THREE.PointsMaterial({
+    size:0.08,
+    map:createParticleTexture(),
+    transparent:true,
+    opacity:0.72,
+    blending:THREE.AdditiveBlending,
+    depthWrite:false
+  });
+
+  var particleSystem=new THREE.Points(particleGeom,particleMat);
+  scene.add(particleSystem);
+
+  // 4. Mouse-Reactive Damped Tilt & Parallax
+  var mouse={x:0,y:0,targetX:0,targetY:0};
+  window.addEventListener('pointermove',function(e){
+    mouse.targetX=(e.clientX/innerWidth)*2-1;
+    mouse.targetY=-(e.clientY/innerHeight)*2+1;
+  });
+  window.addEventListener('pointerleave',function(){
+    mouse.targetX=0;
+    mouse.targetY=0;
+  });
+
+  // 5. Scroll-Reactive Velocity & Depth
+  var lastScrollY=window.scrollY||window.pageYOffset||0;
+  var scrollVelocity=0;
+  var targetScrollVelocity=0;
+  window.addEventListener('scroll',function(){
+    var currentY=window.scrollY||window.pageYOffset||0;
+    var delta=Math.abs(currentY-lastScrollY);
+    lastScrollY=currentY;
+    targetScrollVelocity=Math.min(delta*0.035,4.0);
+  },{passive:true});
+
+  // Resize Handling
+  function onResize(){
+    camera.aspect=innerWidth/innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth,innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  }
+  window.addEventListener('resize',onResize);
+
+  // Animation Loop
+  var clock=new THREE.Clock();
+
+  function animate(){
+    requestAnimationFrame(animate);
+
+    var delta=clock.getDelta();
+    var elapsedTime=clock.getElapsedTime();
+
+    if(RM){
+      delta*=0.2;
+      elapsedTime*=0.2;
+    }
+
+    // Smooth scroll velocity damping
+    scrollVelocity+=(targetScrollVelocity-scrollVelocity)*0.12;
+    targetScrollVelocity*=0.90;
+
+    // Mouse interpolation (damped)
+    mouse.x+=(mouse.targetX-mouse.x)*0.06;
+    mouse.y+=(mouse.targetY-mouse.y)*0.06;
+
+    // Base spin + scroll boost
+    var spinRate=(0.55+scrollVelocity*1.6)*delta;
+    symbolGroup.rotation.z-=spinRate;
+
+    // Gentle 3D floating and mouse-reactive tilt
+    var floatY=Math.sin(elapsedTime*1.1)*0.12;
+    var floatX=Math.cos(elapsedTime*0.8)*0.06;
+    yinYangRoot.position.set(floatX,floatY,0);
+
+    // Dynamic 3D tilt: base tilt + mouse tracking + gentle breathing
+    var baseTiltX=0.35,baseTiltY=0.25;
+    yinYangRoot.rotation.x=baseTiltX+mouse.y*0.46+Math.sin(elapsedTime*0.9)*0.08;
+    yinYangRoot.rotation.y=baseTiltY+mouse.x*0.46+Math.cos(elapsedTime*0.7)*0.08;
+
+    // Camera subtle parallax
+    camera.position.x+=(mouse.x*0.65-camera.position.x)*0.04;
+    camera.position.y+=(mouse.y*0.45-camera.position.y)*0.04;
+    camera.lookAt(0,0,0);
+
+    // Orbital rings rotation
+    var ringScrollFactor=1.0+scrollVelocity*0.9;
+    orbitalRings.forEach(function(r){
+      r.group.rotation.z+=r.config.speed*r.config.dir*delta*ringScrollFactor;
+      r.group.rotation.y+=r.config.speed*0.3*delta;
+    });
+
+    // Satellite orbs on rings
+    ringOrbs.forEach(function(ro){
+      ro.angle+=ro.speed*delta*ringScrollFactor;
+      ro.mesh.position.set(Math.cos(ro.angle)*ro.radius,Math.sin(ro.angle)*ro.radius,0);
+    });
+
+    // Floating metallic orbs
+    floatingOrbs.forEach(function(fo){
+      fo.angle+=fo.speed*delta*ringScrollFactor;
+      var y=fo.baseY+Math.sin(elapsedTime*fo.floatSpeed+fo.phase)*0.22;
+      fo.mesh.position.set(Math.cos(fo.angle)*fo.dist,y,Math.sin(fo.angle)*fo.dist);
+      fo.mesh.rotation.y+=delta*0.5;
+    });
+
+    // Particle field gentle vortex drift
+    particleSystem.rotation.y+=0.05*delta;
+    particleSystem.rotation.z+=0.02*delta;
+
+    renderer.render(scene,camera);
+  }
+
+  animate();
 }
 function tw(){
   var el=document.getElementById("tw");if(!el)return;
@@ -376,9 +702,9 @@ var BANNER=String.raw`    _    _     _______  __        ____
   / _ \ | |   |  _|  \  /        \___ \
  / ___ \| |___| |___ /  \   __    ___) |
 /_/   \_\_____|_____/_/\_\ |__|  |____/`.split("\n");
-function termHTML(){return "<h2 style=\"margin-top:72px\">Terminal</h2><p class=\"lede\">A small command line for this site. Type help, or tap a command.</p><div class=\"term\" id=\"term\"><div class=\"tbar\"><i></i><i></i><i></i><span>alex@portfolio</span></div><div class=\"tout\" id=\"tout\" role=\"log\" aria-live=\"polite\"></div><div class=\"tline\"><label for=\"tin\">alex@portfolio:~$</label><input id=\"tin\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\"></div></div><div class=\"chips\">"+["help","neofetch","projects","skills","matrix"].map(function(c){return "<button type=\"button\" class=\"chip\" data-c=\""+c+"\">"+c+"</button>"}).join("")+"</div>"}
+function termHTML(){return "<h2 style=\"margin-top:72px\">Terminal</h2><p class=\"lede\">A small command line for this site. Type help, or tap a command.</p><div class=\"term\" id=\"term\"><div class=\"tbar\"><i></i><i></i><i></i><span>alex@portfolio</span></div><div class=\"tout\" id=\"tout\" role=\"log\" aria-live=\"polite\"></div><div class=\"tline\"><label for=\"tin\">alex@portfolio:~$</label><input id=\"tin\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\"></div></div><div class=\"chips\">"+["help","neofetch","projects","skills","matrix","yinyang"].map(function(c){return "<button type=\"button\" class=\"chip\" data-c=\""+c+"\">"+c+"</button>"}).join("")+"</div>"}
 var CMDS={
- help:function(a,pr){["help        list commands","whoami      who I am","neofetch    system info","ls          list sections","projects    my projects","skills      my stack","resume      view my resume","journey     timeline","contact     get in touch","open <x>    go to a page or project","theme       invert colors","matrix      enter the matrix","clear       clear the screen"].forEach(function(l){pr(l)})},
+ help:function(a,pr){["help        list commands","whoami      who I am","neofetch    system info","ls          list sections","projects    my projects","skills      my stack","resume      view my resume","journey     timeline","contact     get in touch","open <x>    go to a page or project","yinyang     toggle / boost 3D background","theme       invert colors","matrix      enter the matrix","clear       clear the screen"].forEach(function(l){pr(l)})},
  whoami:function(a,pr){pr("Alex S: AI Engineer, Full Stack Developer, Cyber Security Enthusiast.");pr("Mission: build intelligent software systems that solve real-world problems.");pr("Mindset: learn > build > break > fix > improve")},
  ls:function(a,pr){pr("projects/  skills/  resume/  about/  contact/")},
  projects:function(a,pr){P.forEach(function(p){pr((p.n+"                        ").slice(0,24)+"["+p.st.toLowerCase()+"]")});pr("Run: open <project name>")},
@@ -389,6 +715,14 @@ var CMDS={
  neofetch:function(a,pr){["alex@portfolio","--------------","Role:       AI Engineer, Full Stack Developer","Focus:      AI, ML, cyber security, data analytics","Exploring:  agentic AI, LLMs, RAG, MLOps","Languages:  Python, Java, C, C++, JS, TS","Projects:   "+P.length,"Coding:     since 2023"].forEach(function(l){pr(l)})},
  theme:function(a,pr){$("theme").click();pr("colors inverted.")},
  matrix:function(a,pr){pr("Follow the white rabbit. (Esc to exit)");rain()},
+ yinyang:function(a,pr){
+  var cv=$("yinyang-canvas");
+  if(cv){
+    var isOff=cv.style.display==="none";
+    cv.style.display=isOff?"block":"none";
+    pr("3D Yin-Yang background: "+(isOff?"ENABLED":"DISABLED"));
+  }else pr("3D background canvas not found.");
+ },
  open:function(a,pr){
   if(!a){pr("usage: open <page or project>");return}
   var pg=["home","projects","skills","resume","about","contact"];
@@ -658,7 +992,212 @@ function route(){
   [].forEach.call(document.querySelectorAll('#nav a'),function(a){if(a.dataset.r===r)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
   window.scrollTo(0,0);app.focus({preventScroll:true});app.classList.remove('enter');void app.offsetWidth;app.classList.add('enter');tw();reveal();prog();fx2();initTerm();if(r==='resume')initResume();
 }
-window.addEventListener('hashchange',route);boot(route);
+function init3DYinYangBackground(){
+  var canvas=document.getElementById('yinyang-canvas');
+  if(!canvas)return;
+  var ctx=canvas.getContext('2d');
+  var dpr=window.devicePixelRatio||1;
+  var W,H;
+
+  function resize(){
+    W=window.innerWidth;H=window.innerHeight;
+    canvas.width=W*dpr;canvas.height=H*dpr;
+    canvas.style.width=W+'px';canvas.style.height=H+'px';
+    ctx.scale(dpr,dpr);
+  }
+  resize();
+  window.addEventListener('resize',function(){ctx.setTransform(1,0,0,1,0,0);resize();});
+
+  /* ── colour helpers ── */
+  function isDark(){
+    var t=document.documentElement.getAttribute('data-theme');
+    if(t==='dark')return true;
+    if(t==='light')return false;
+    return window.matchMedia('(prefers-color-scheme:dark)').matches;
+  }
+
+  /* ── Yin-Yang path helpers ── */
+  function drawYinYangFace(cx,cy,R,angle,dark){
+    /* R = outer radius, angle = rotation of whole symbol */
+    ctx.save();
+    ctx.translate(cx,cy);
+    ctx.rotate(angle);
+
+    var r=R/2; /* half-radius for S-curves */
+
+    /* BIG circle clip */
+    ctx.beginPath();
+    ctx.arc(0,0,R,0,Math.PI*2);
+    ctx.clip();
+
+    /* ── white half ── */
+    ctx.beginPath();
+    ctx.arc(0,0,R,-Math.PI/2,Math.PI/2,false);
+    ctx.arc(0,r,r, Math.PI/2,-Math.PI/2,true);
+    ctx.arc(0,-r,r,-Math.PI/2,Math.PI/2,false);
+    ctx.closePath();
+    ctx.fillStyle=dark?'#1a1a1a':'#f0f0f0';
+    ctx.fill();
+
+    /* ── black half ── */
+    ctx.beginPath();
+    ctx.arc(0,0,R, Math.PI/2,-Math.PI/2,false);
+    ctx.arc(0,-r,r,-Math.PI/2,Math.PI/2,true);
+    ctx.arc(0, r,r, Math.PI/2,-Math.PI/2,false);
+    ctx.closePath();
+    ctx.fillStyle=dark?'#f0f0f0':'#1a1a1a';
+    ctx.fill();
+
+    /* ── dots ── */
+    var dr=r*0.32;
+    ctx.beginPath();
+    ctx.arc(0,-r,dr,0,Math.PI*2);
+    ctx.fillStyle=dark?'#1a1a1a':'#f0f0f0';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(0, r,dr,0,Math.PI*2);
+    ctx.fillStyle=dark?'#f0f0f0':'#1a1a1a';
+    ctx.fill();
+
+    /* ── outer ring ── */
+    ctx.beginPath();
+    ctx.arc(0,0,R,0,Math.PI*2);
+    ctx.strokeStyle=dark?'rgba(255,255,255,0.08)':'rgba(0,0,0,0.08)';
+    ctx.lineWidth=R*0.015;
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  /* ── Orbital ring helper ── */
+  function drawRing(cx,cy,rx,ry,angle,alpha,thickness,color){
+    ctx.save();
+    ctx.translate(cx,cy);
+    ctx.rotate(angle);
+    ctx.globalAlpha=alpha;
+    ctx.beginPath();
+    ctx.ellipse(0,0,rx,ry,0,0,Math.PI*2);
+    ctx.strokeStyle=color;
+    ctx.lineWidth=thickness;
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  /* ── Particle system ── */
+  var PARTS=120;
+  var parts=[];
+  for(var i=0;i<PARTS;i++){
+    var ang=Math.random()*Math.PI*2;
+    var rad=180+Math.random()*260;
+    parts.push({
+      ax:ang,ay:Math.random()*Math.PI*2,
+      speed:(Math.random()*0.003+0.001)*(Math.random()<0.5?1:-1),
+      r:rad,
+      size:Math.random()*1.6+0.4,
+      alpha:Math.random()*0.5+0.15,
+      phase:Math.random()*Math.PI*2,
+      phaseSpeed:Math.random()*0.02+0.005
+    });
+  }
+
+  var t=0;
+  var raf=null;
+  var paused=false;
+  document.addEventListener('visibilitychange',function(){paused=document.hidden;if(!paused&&!raf)loop();});
+
+  function lerp(a,b,f){return a+(b-a)*f;}
+
+  function loop(){
+    raf=null;
+    if(paused)return;
+    t+=0.008;
+    ctx.clearRect(0,0,W,H);
+
+    var dark=isDark();
+    var cx=W*0.5,cy=H*0.5;
+
+    /* ── far background glow ── */
+    var grd=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(W,H)*0.55);
+    if(dark){
+      grd.addColorStop(0,'rgba(40,40,40,0.18)');
+      grd.addColorStop(0.5,'rgba(15,15,15,0.09)');
+      grd.addColorStop(1,'rgba(0,0,0,0)');
+    }else{
+      grd.addColorStop(0,'rgba(220,220,220,0.18)');
+      grd.addColorStop(0.5,'rgba(240,240,240,0.09)');
+      grd.addColorStop(1,'rgba(255,255,255,0)');
+    }
+    ctx.fillStyle=grd;
+    ctx.fillRect(0,0,W,H);
+
+    /* ── particles ── */
+    var pColor=dark?'rgba(255,255,255,':'rgba(0,0,0,';
+    for(var k=0;k<PARTS;k++){
+      var p=parts[k];
+      p.ax+=p.speed;
+      p.phase+=p.phaseSpeed;
+      var px=cx+Math.cos(p.ax)*p.r;
+      var py=cy+Math.sin(p.ax)*p.r*0.42+Math.sin(p.phase)*18;
+      var a=p.alpha*(0.4+0.6*Math.abs(Math.sin(p.phase)));
+      ctx.beginPath();
+      ctx.arc(px,py,p.size,0,Math.PI*2);
+      ctx.fillStyle=pColor+a+')';
+      ctx.fill();
+    }
+
+    /* ── outer decorative rings ── */
+    var ringColor=dark?'rgba(255,255,255,':'rgba(0,0,0,';
+    var rs=150+Math.sin(t*0.7)*6; /* subtle breathe */
+
+    /* ring 1 – slow ellipse */
+    drawRing(cx,cy,rs*1.55,rs*0.52,t*0.12,dark?0.08:0.06,1.2,ringColor+'1)');
+    /* ring 2 – medium circle */
+    drawRing(cx,cy,rs*1.3,rs*1.3,-t*0.18,dark?0.10:0.07,0.8,ringColor+'1)');
+    /* ring 3 – fast narrow ellipse */
+    drawRing(cx,cy,rs*1.72,rs*0.35,t*0.28,dark?0.06:0.04,0.7,ringColor+'1)');
+    /* ring 4 – subtle wide circle */
+    drawRing(cx,cy,rs*1.85,rs*1.85,-t*0.09,dark?0.04:0.03,1.5,ringColor+'1)');
+
+    /* ── glow halo behind symbol ── */
+    var halo=ctx.createRadialGradient(cx,cy,rs*0.3,cx,cy,rs*1.1);
+    if(dark){
+      halo.addColorStop(0,'rgba(255,255,255,0.06)');
+      halo.addColorStop(1,'rgba(255,255,255,0)');
+    }else{
+      halo.addColorStop(0,'rgba(0,0,0,0.04)');
+      halo.addColorStop(1,'rgba(0,0,0,0)');
+    }
+    ctx.fillStyle=halo;
+    ctx.beginPath();
+    ctx.arc(cx,cy,rs*1.1,0,Math.PI*2);
+    ctx.fill();
+
+    /* ── main Yin-Yang symbol ── */
+    var mainR=rs*(0.72+Math.sin(t*0.5)*0.012);
+    var mainAngle=t*0.22;
+    /* slight tilt wobble */
+    var tiltX=Math.sin(t*0.31)*4;
+    var tiltY=Math.cos(t*0.23)*3;
+
+    /* soft shadow */
+    ctx.save();
+    ctx.shadowColor=dark?'rgba(255,255,255,0.08)':'rgba(0,0,0,0.12)';
+    ctx.shadowBlur=40;
+    drawYinYangFace(cx+tiltX,cy+tiltY,mainR,mainAngle,dark);
+    ctx.restore();
+
+    /* clean symbol on top */
+    drawYinYangFace(cx+tiltX,cy+tiltY,mainR,mainAngle,dark);
+
+    /* ── inner accent rings (tightly around symbol) ── */
+    drawRing(cx+tiltX,cy+tiltY,mainR*1.04,mainR*1.04,-mainAngle*0.5,dark?0.12:0.09,0.6,ringColor+'1)');
+    drawRing(cx+tiltX,cy+tiltY,mainR*1.09,mainR*1.09, mainAngle*0.3,dark?0.07:0.05,0.4,ringColor+'1)');
+
+    raf=requestAnimationFrame(loop);
+  }
+  loop();
+}
+window.addEventListener('hashchange',route);boot(route);init3DYinYangBackground();
 document.getElementById("theme").onclick=function(ev){
  var r=document.documentElement,d=r.getAttribute("data-theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
  function flip(){r.setAttribute("data-theme",d==="dark"?"light":"dark")}
