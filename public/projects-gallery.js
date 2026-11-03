@@ -54,7 +54,7 @@
 
   // Render a single featured card
   function renderFeaturedCard(p) {
-    var accent = p.accent || "#00f3ff";
+    var accent = p.accent || "#ffffff";
     var visualSVG = root.renderProjectVisual ? root.renderProjectVisual(p, true) : "";
 
     var techPills = (p.tech || []).slice(0, 5).map(function(t) {
@@ -102,7 +102,7 @@
 
   // Render a regular 3D card
   function renderRegularCard(p) {
-    var accent = p.accent || "#00f3ff";
+    var accent = p.accent || "#ffffff";
     var visualSVG = root.renderProjectVisual ? root.renderProjectVisual(p, false) : "";
 
     var techTags = (p.tech || []).slice(0, 4).map(function(t) {
@@ -216,7 +216,7 @@
     var prev = all[(currentIndex - 1 + all.length) % all.length];
     var next = all[(currentIndex + 1) % all.length];
 
-    var accent = p.accent || "#00f3ff";
+    var accent = p.accent || "#ffffff";
     var visualSVG = root.renderProjectVisual ? root.renderProjectVisual(p, true) : "";
 
     var featuresHTML = (p.features || []).map(function(f) {

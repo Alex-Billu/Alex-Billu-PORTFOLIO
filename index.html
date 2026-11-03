@@ -297,7 +297,7 @@ function esc(x){var d=document.createElement('div');d.textContent=x;return d.inn
 function tags(a){return '<ul class="tags">'+a.map(function(t){return '<li>'+esc(t)+'</li>'}).join('')+'</ul>'}
 function card(p){
   var proj=p.data||p;
-  var accent=proj.accent||"#00f3ff";
+  var accent=proj.accent||"#ffffff";
   var visualSVG=window.renderProjectVisual?window.renderProjectVisual(proj,false):"";
   var techTags=(proj.tech||proj.t||[]).slice(0,3).map(function(t){return '<li class="card-tech-tag">'+esc(t)+'</li>';}).join('');
   return '<div class="card-3d-wrap">' +
@@ -335,7 +335,7 @@ project:function(id){
   var idx=all.findIndex(function(item){return item.id===id});
   var pr=all[(idx+all.length-1)%all.length];
   var nx=all[(idx+1)%all.length];
-  var accent=proj.accent||"#00f3ff";
+  var accent=proj.accent||"#ffffff";
   var visualSVG=window.renderProjectVisual?window.renderProjectVisual(proj,true):"";
   var featuresHTML=(proj.features||[]).map(function(f){
     return '<li class="modal-feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg><span>'+esc(f)+'</span></li>';
@@ -521,57 +521,16 @@ function init3DYinYangBackground(){
   yinYangRoot.add(symbolGroup);
   scene.add(yinYangRoot);
 
-  // Route State Management for 3D Yin-Yang position & scale
-  var initialRoute=(location.hash||'').replace(/^#\/?/,'').split('/')[0]||'home';
-  var routeState={
-    targetX:0,
-    targetY:0,
-    targetZ:0,
-    targetScale:1.0,
-    curX:0,
-    curY:0,
-    curZ:0,
-    curScale:1.0,
-    currentRoute:initialRoute
-  };
-
-  function updateYinYangTarget(r){
-    if(r)routeState.currentRoute=r;
-    if(routeState.currentRoute==='skills'){
-      if(window.innerWidth>1080){
-        routeState.targetX=2.45;
-        routeState.targetY=1.35;
-        routeState.targetZ=0;
-        routeState.targetScale=0.64;
-      }else if(window.innerWidth>640){
-        routeState.targetX=1.6;
-        routeState.targetY=1.4;
-        routeState.targetZ=0;
-        routeState.targetScale=0.52;
-      }else{
-        routeState.targetX=0.75;
-        routeState.targetY=1.8;
-        routeState.targetZ=0;
-        routeState.targetScale=0.42;
-      }
-    }else{
-      routeState.targetX=0;
-      routeState.targetY=0;
-      routeState.targetZ=0;
-      routeState.targetScale=1.0;
-    }
+  // Responsive Scale helper: keeps 3D Yin-Yang fixed and centered across all sections
+  function getResponsiveScale(){
+    if(window.innerWidth<=640) return 0.72;
+    if(window.innerWidth<=1080) return 0.88;
+    return 1.0;
   }
 
   window.setYinYangRoute=function(r){
-    updateYinYangTarget(r);
+    // Keep 3D Yin-Yang fixed and seamlessly animating in the background across all sections
   };
-
-  updateYinYangTarget(initialRoute);
-  if(initialRoute==='skills'){
-    routeState.curX=routeState.targetX;
-    routeState.curY=routeState.targetY;
-    routeState.curScale=routeState.targetScale;
-  }
 
   // 2. Animated 3D Orbital Rings (Multi-axis Gyroscopic)
   var ringsGroup=new THREE.Group();
@@ -685,26 +644,16 @@ function init3DYinYangBackground(){
   var particleSystem=new THREE.Points(particleGeom,particleMat);
   scene.add(particleSystem);
 
-  // 4. Mouse-Reactive Damped Tilt & Parallax
-  var mouse={x:0,y:0,targetX:0,targetY:0};
-  window.addEventListener('pointermove',function(e){
-    mouse.targetX=(e.clientX/innerWidth)*2-1;
-    mouse.targetY=-(e.clientY/innerHeight)*2+1;
-  });
-  window.addEventListener('pointerleave',function(){
-    mouse.targetX=0;
-    mouse.targetY=0;
-  });
-
-  // 5. Scroll-Reactive Velocity & Depth
+  // 4. Scroll-Reactive Velocity & Rotation Tracking (Zero mouse cursor tracking)
   var lastScrollY=window.scrollY||window.pageYOffset||0;
   var scrollVelocity=0;
   var targetScrollVelocity=0;
+
   window.addEventListener('scroll',function(){
     var currentY=window.scrollY||window.pageYOffset||0;
     var delta=Math.abs(currentY-lastScrollY);
     lastScrollY=currentY;
-    targetScrollVelocity=Math.min(delta*0.035,4.0);
+    targetScrollVelocity=Math.min(targetScrollVelocity+delta*0.04,5.0);
   },{passive:true});
 
   // Resize Handling
@@ -713,11 +662,10 @@ function init3DYinYangBackground(){
     camera.updateProjectionMatrix();
     renderer.setSize(innerWidth,innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
-    updateYinYangTarget();
   }
   window.addEventListener('resize',onResize);
 
-  // Animation Loop
+  // Animation Loop: Seamless 3D rotation influenced by scroll, fixed in background
   var clock=new THREE.Clock();
 
   function animate(){
@@ -731,46 +679,36 @@ function init3DYinYangBackground(){
       elapsedTime*=0.2;
     }
 
-    // Smooth scroll velocity damping
-    scrollVelocity+=(targetScrollVelocity-scrollVelocity)*0.12;
-    targetScrollVelocity*=0.90;
+    // Smooth scroll velocity damping with natural flywheel inertia
+    scrollVelocity+=(targetScrollVelocity-scrollVelocity)*0.09;
+    targetScrollVelocity*=0.93;
 
-    // Mouse interpolation (damped)
-    mouse.x+=(mouse.targetX-mouse.x)*0.06;
-    mouse.y+=(mouse.targetY-mouse.y)*0.06;
-
-    // Base spin + scroll boost
-    var spinRate=(0.55+scrollVelocity*1.6)*delta;
+    // Continuous autonomous rotation + smooth scroll acceleration
+    var baseSpinRate=0.52;
+    var spinRate=(baseSpinRate+scrollVelocity*1.6)*delta;
     symbolGroup.rotation.z-=spinRate;
 
-    // Route position and scale smooth interpolation (cinematic damping)
-    var routeLerp=0.045;
-    routeState.curX+=(routeState.targetX-routeState.curX)*routeLerp;
-    routeState.curY+=(routeState.targetY-routeState.curY)*routeLerp;
-    routeState.curZ+=(routeState.targetZ-routeState.curZ)*routeLerp;
-    routeState.curScale+=(routeState.targetScale-routeState.curScale)*routeLerp;
+    // Fixed background scale and subtle organic floating
+    var currentScale=getResponsiveScale();
+    var floatY=Math.sin(elapsedTime*1.0)*0.08*currentScale;
+    yinYangRoot.position.set(0,floatY,0);
+    yinYangRoot.scale.set(currentScale,currentScale,currentScale);
 
-    // Gentle 3D floating scaled by current scale
-    var floatY=Math.sin(elapsedTime*1.1)*0.12*routeState.curScale;
-    var floatX=Math.cos(elapsedTime*0.8)*0.06*routeState.curScale;
-    yinYangRoot.position.set(routeState.curX+floatX,routeState.curY+floatY,routeState.curZ);
-    yinYangRoot.scale.set(routeState.curScale,routeState.curScale,routeState.curScale);
+    // Fixed isometric 3D perspective orientation with subtle organic breathing (No mouse cursor tracking)
+    var baseTiltX=0.35,baseTiltY=0.22;
+    yinYangRoot.rotation.x=baseTiltX+Math.sin(elapsedTime*0.7)*0.04;
+    yinYangRoot.rotation.y=baseTiltY+Math.cos(elapsedTime*0.6)*0.04;
+    yinYangRoot.rotation.z=0;
 
-    // Dynamic 3D tilt: base tilt + mouse tracking + gentle breathing
-    var baseTiltX=0.35,baseTiltY=0.25;
-    yinYangRoot.rotation.x=baseTiltX+mouse.y*0.46+Math.sin(elapsedTime*0.9)*0.08;
-    yinYangRoot.rotation.y=baseTiltY+mouse.x*0.46+Math.cos(elapsedTime*0.7)*0.08;
-
-    // Camera subtle parallax
-    camera.position.x+=(mouse.x*0.65-camera.position.x)*0.04;
-    camera.position.y+=(mouse.y*0.45-camera.position.y)*0.04;
+    // Fixed camera
+    camera.position.set(0,0,7.8);
     camera.lookAt(0,0,0);
 
-    // Orbital rings rotation
-    var ringScrollFactor=1.0+scrollVelocity*0.9;
+    // Orbital rings rotation influenced smoothly by scroll
+    var ringScrollFactor=1.0+scrollVelocity*1.0;
     orbitalRings.forEach(function(r){
       r.group.rotation.z+=r.config.speed*r.config.dir*delta*ringScrollFactor;
-      r.group.rotation.y+=r.config.speed*0.3*delta;
+      r.group.rotation.y+=r.config.speed*0.3*delta*ringScrollFactor;
     });
 
     // Satellite orbs on rings
@@ -784,11 +722,11 @@ function init3DYinYangBackground(){
       fo.angle+=fo.speed*delta*ringScrollFactor;
       var y=fo.baseY+Math.sin(elapsedTime*fo.floatSpeed+fo.phase)*0.22;
       fo.mesh.position.set(Math.cos(fo.angle)*fo.dist,y,Math.sin(fo.angle)*fo.dist);
-      fo.mesh.rotation.y+=delta*0.5;
+      fo.mesh.rotation.y+=delta*0.5*ringScrollFactor;
     });
 
     // Particle field gentle vortex drift
-    particleSystem.rotation.y+=0.05*delta;
+    particleSystem.rotation.y+=0.04*delta;
     particleSystem.rotation.z+=0.02*delta;
 
     renderer.render(scene,camera);

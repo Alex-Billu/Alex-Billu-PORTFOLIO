@@ -14,7 +14,7 @@
       categories: ["AI & ML", "Web Development"],
       status: "AI Platform",
       featured: true,
-      accent: "#00f3ff",
+      accent: "#ffffff",
       description: "An intelligent AI-powered assistant designed to simplify user interactions through conversational intelligence, automated assistance, and smart information processing.",
       tech: ["Python", "AI/ML", "NLP", "React"],
       features: [
@@ -37,7 +37,7 @@
       categories: ["AI & ML"],
       status: "Cybersecurity ML",
       featured: false,
-      accent: "#f43f5e",
+      accent: "#e5e5e5",
       description: "An AI-powered cybersecurity solution that analyzes suspicious messages, URLs, and digital content to identify potential scams and fraudulent activities. Provides intelligent threat detection and risk analysis.",
       tech: ["Python", "Machine Learning", "NLP", "Flask"],
       features: [
@@ -60,7 +60,7 @@
       categories: ["AI & ML", "Android"],
       status: "Digital Wellbeing ML",
       featured: false,
-      accent: "#8b5cf6",
+      accent: "#d4d4d4",
       description: "A machine learning application that analyzes smartphone usage, screen time, social media activity, gaming habits, and sleep behavior to predict mobile addiction levels. Includes usage analytics, app-locking functionality, OTP-based unlocking, notifications, and personalized recommendations.",
       tech: ["Python", "Flask", "Machine Learning", "Firebase", "HTML", "CSS", "JavaScript"],
       features: [
@@ -84,7 +84,7 @@
       categories: ["AI & ML", "Research"],
       status: "Healthcare Diagnostic Research",
       featured: false,
-      accent: "#10b981",
+      accent: "#cccccc",
       description: "An AI-based healthcare solution that analyzes medical input data to identify potential disease indicators and generate preliminary prediction results.",
       tech: ["Python", "Machine Learning", "Deep Learning"],
       features: [
@@ -107,7 +107,7 @@
       categories: ["AI & ML", "Web Development"],
       status: "Interactive AI Platform",
       featured: false,
-      accent: "#38bdf8",
+      accent: "#f0f0f0",
       description: "An AI-powered interview preparation platform that helps candidates practice interviews, evaluate responses, improve communication, and receive intelligent feedback.",
       tech: ["Python", "AI/ML", "NLP", "React"],
       features: [
@@ -130,7 +130,7 @@
       categories: ["Research", "AI & ML"],
       status: "Advanced Research",
       featured: false,
-      accent: "#ec4899",
+      accent: "#e0e0e0",
       description: "An advanced computational biology project that reconstructs 3D DNA structures using pairwise proximity information and Graph Neural Networks. Includes Ground Truth, Spectral-MDS, GNN reconstruction, uncertainty visualization, and RMSE-based performance evaluation.",
       tech: ["Python", "PyTorch", "Graph Neural Networks", "Plotly"],
       features: [
@@ -154,7 +154,7 @@
       categories: ["Research", "AI & ML"],
       status: "Flagship Research",
       featured: true,
-      accent: "#14b8a6",
+      accent: "#ffffff",
       description: "An AI-driven genomic analysis platform that processes DNA sequences to identify mutations, predict potential antibiotic resistance, monitor pathogen patterns, and generate genomic risk reports.",
       tech: ["Python", "Bioinformatics", "Machine Learning", "Deep Learning"],
       features: [
@@ -177,7 +177,7 @@
       categories: ["Full Stack", "Web Development"],
       status: "Flagship Full Stack",
       featured: true,
-      accent: "#f59e0b",
+      accent: "#ffffff",
       description: "An AI-powered garment shopping platform combining online shopping with intelligent clothing size prediction. Helps users discover suitable clothing sizes through personalized measurements and smart recommendations.",
       tech: ["Python", "Flask", "MySQL", "Machine Learning", "HTML", "CSS", "JavaScript"],
       features: [
@@ -200,7 +200,7 @@
       categories: ["Full Stack", "Web Development"],
       status: "Full Stack Medical System",
       featured: false,
-      accent: "#06b6d4",
+      accent: "#d8d8d8",
       description: "A smart hospital appointment management platform where patients can explore departments, select doctors, view available appointment slots, and book consultations. Includes real-time appointment updates and doctor-side notifications.",
       tech: ["Next.js", "React", "Node.js", "Express.js", "SQLite", "Socket.IO", "Tailwind CSS"],
       features: [
@@ -223,7 +223,7 @@
       categories: ["Android", "Full Stack"],
       status: "Mobile Safety App",
       featured: false,
-      accent: "#ef4444",
+      accent: "#c8c8c8",
       description: "A location-aware personal safety application designed to help users access safer routes and emergency assistance through an intuitive mobile interface.",
       tech: ["React Native", "Expo", "Python", "Flask", "SQLite"],
       features: [
@@ -246,7 +246,7 @@
       categories: ["Web Development"],
       status: "Institutional Web Portal",
       featured: false,
-      accent: "#6366f1",
+      accent: "#b8b8b8",
       description: "A professional school website designed to establish a digital presence for educational institutions. Includes information about academics, facilities, admissions, announcements, and school activities.",
       tech: ["React", "JavaScript", "HTML", "CSS"],
       features: [
@@ -269,7 +269,7 @@
       categories: ["Web Development"],
       status: "Active Production Site",
       featured: false,
-      accent: "#a855f7",
+      accent: "#f5f5f5",
       description: "An interactive 3D developer portfolio showcasing projects, skills, achievements, and professional experience through immersive animations and modern visual design.",
       tech: ["React", "Next.js", "Three.js", "React Three Fiber", "Tailwind CSS", "GSAP", "Framer Motion"],
       features: [
@@ -293,7 +293,7 @@
       categories: ["Android"],
       status: "Native Android App",
       featured: false,
-      accent: "#f97316",
+      accent: "#aaaaaa",
       description: "An Android-based application designed to manage mobile shop products, inventory, customer information, and sales operations.",
       tech: ["Android Studio", "Java", "Firebase"],
       features: [
@@ -316,7 +316,7 @@
       categories: ["Research", "Full Stack", "Android"],
       status: "Enterprise Research Platform",
       featured: false,
-      accent: "#22c55e",
+      accent: "#d0d0d0",
       description: "A campus sustainability platform that monitors energy consumption, water usage, transportation, waste management, and carbon footprint. Provides sustainability insights and AI-based recommendations.",
       tech: ["Java", "Java Swing", "AI-based Recommendations"],
       features: [
@@ -339,7 +339,7 @@
       categories: ["Research", "AI & ML"],
       status: "Flagship Research Prototype",
       featured: true,
-      accent: "#3b82f6",
+      accent: "#ffffff",
       description: "An AI-based human activity recognition prototype developed around the SIH Problem Statement 26174. Uses computer vision, object detection, pose estimation, and deep learning to recognize activities such as approaching, picking, transferring, opening, and closing objects. Includes confidence scoring and a simulated telemetry dashboard.",
       note: "Presented as a hackathon prototype, not an officially deployed ISRO system.",
       tech: ["Python", "OpenCV", "YOLO", "MediaPipe", "PyTorch", "React", "TypeScript", "Node.js", "Socket.IO"],

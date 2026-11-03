@@ -12,7 +12,7 @@
 
   root.renderProjectVisual = function(project, isFeatured) {
     var type = project.visualType || "ai-assistant";
-    var accent = project.accent || "#00f3ff";
+    var accent = project.accent || "#ffffff";
     var num = project.number || "01";
     var title = esc(project.name);
 
@@ -37,7 +37,7 @@
         '<feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>' +
       '</filter>' +
     '</defs>' +
-    '<rect width="' + w + '" height="' + h + '" fill="#07090e"/>' +
+    '<rect width="' + w + '" height="' + h + '" fill="#080808"/>' +
     '<rect width="' + w + '" height="' + h + '" fill="url(#grid-' + num + ')"/>' +
     '<circle cx="' + (w/2) + '" cy="' + (h/2) + '" r="' + (h*0.7) + '" fill="url(#g-radial-' + num + ')"/>';
 
@@ -63,7 +63,7 @@
             '<line x1="25" y1="70" x2="15" y2="95" stroke="' + accent + '" stroke-width="2"/>' +
             '<line x1="95" y1="45" x2="115" y2="65" stroke="' + accent + '" stroke-width="2"/>' +
             '<line x1="115" y1="65" x2="135" y2="80" stroke="' + accent + '" stroke-width="2"/>' +
-            '<circle cx="135" cy="80" r="5" fill="#f59e0b" filter="url(#glow-' + num + ')"/>' +
+            '<circle cx="135" cy="80" r="5" fill="#ffffff" filter="url(#glow-' + num + ')"/>' +
             '<line x1="70" y1="80" x2="50" y2="105" stroke="' + accent + '" stroke-width="2"/>' +
             '<line x1="50" y1="105" x2="45" y2="135" stroke="' + accent + '" stroke-width="2"/>' +
             '<line x1="70" y1="80" x2="90" y2="105" stroke="' + accent + '" stroke-width="2"/>' +
@@ -75,7 +75,7 @@
             '<circle cx="115" cy="65" r="3" fill="#fff"/>' +
             '<circle cx="70" cy="80" r="3.5" fill="#fff"/>' +
             '<!-- Target Tag -->' +
-            '<rect x="-8" y="-30" width="156" height="18" rx="4" fill="rgba(10,12,18,0.9)" stroke="' + accent + '" stroke-width="1"/>' +
+            '<rect x="-8" y="-30" width="156" height="18" rx="4" fill="rgba(12,12,12,0.9)" stroke="' + accent + '" stroke-width="1"/>' +
             '<text x="0" y="-17" font-family="monospace" font-size="9" font-weight="700" fill="' + accent + '">ACTION: PICKING (98.4%)</text>' +
           '</g>' +
           '<!-- Telemetry waveform trace -->' +
@@ -97,18 +97,18 @@
             '<line x1="30" y1="55" x2="150" y2="55" stroke="' + accent + '" stroke-width="1" stroke-dasharray="3 3"/>' +
             '<circle cx="30" cy="55" r="3" fill="' + accent + '"/>' +
             '<circle cx="150" cy="55" r="3" fill="' + accent + '"/>' +
-            '<rect x="156" y="46" width="76" height="18" rx="4" fill="rgba(10,12,18,0.9)" stroke="' + accent + '" stroke-width="1"/>' +
+            '<rect x="156" y="46" width="76" height="18" rx="4" fill="rgba(12,12,12,0.9)" stroke="' + accent + '" stroke-width="1"/>' +
             '<text x="162" y="59" font-family="monospace" font-size="9" font-weight="700" fill="' + accent + '">CHEST: 98 cm</text>' +
             '<!-- Dimension Callout: Waist -->' +
             '<line x1="40" y1="105" x2="140" y2="105" stroke="' + accent + '" stroke-width="1" stroke-dasharray="3 3"/>' +
             '<circle cx="40" cy="105" r="3" fill="' + accent + '"/>' +
             '<circle cx="140" cy="105" r="3" fill="' + accent + '"/>' +
-            '<rect x="146" y="96" width="76" height="18" rx="4" fill="rgba(10,12,18,0.9)" stroke="' + accent + '" stroke-width="1"/>' +
+            '<rect x="146" y="96" width="76" height="18" rx="4" fill="rgba(12,12,12,0.9)" stroke="' + accent + '" stroke-width="1"/>' +
             '<text x="152" y="109" font-family="monospace" font-size="9" font-weight="700" fill="' + accent + '">WAIST: 82 cm</text>' +
           '</g>' +
           '<!-- AI Prediction Badge -->' +
           '<g transform="translate(24, ' + (h - 38) + ')">' +
-            '<rect x="0" y="0" width="186" height="22" rx="11" fill="rgba(10,12,18,0.9)" stroke="' + accent + '" stroke-width="1.2"/>' +
+            '<rect x="0" y="0" width="186" height="22" rx="11" fill="rgba(12,12,12,0.9)" stroke="' + accent + '" stroke-width="1.2"/>' +
             '<circle cx="12" cy="11" r="4" fill="' + accent + '"/>' +
             '<text x="24" y="15" font-family="monospace" font-size="10" font-weight="700" fill="#fff">RECOMMENDED: SIZE M (97.8%)</text>' +
           '</g>';
@@ -168,11 +168,11 @@
             '<line x1="245" y1="25" x2="245" y2="65" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>' +
             '<line x1="280" y1="45" x2="280" y2="45" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>' +
             '<!-- Mutation Hotspot Marker -->' +
-            '<circle cx="175" cy="25" r="7" fill="#f43f5e" filter="url(#glow-' + num + ')"/>' +
+            '<circle cx="175" cy="25" r="7" fill="#ffffff" filter="url(#glow-' + num + ')"/>' +
             '<circle cx="175" cy="25" r="3" fill="#fff"/>' +
-            '<line x1="175" y1="15" x2="175" y2="-10" stroke="#f43f5e" stroke-width="1.2"/>' +
-            '<rect x="110" y="-28" width="130" height="18" rx="4" fill="rgba(10,12,18,0.9)" stroke="#f43f5e" stroke-width="1"/>' +
-            '<text x="118" y="-16" font-family="monospace" font-size="8.5" font-weight="700" fill="#f43f5e">MUTATION: RESISTANCE +</text>' +
+            '<line x1="175" y1="15" x2="175" y2="-10" stroke="#ffffff" stroke-width="1.2"/>' +
+            '<rect x="110" y="-28" width="130" height="18" rx="4" fill="rgba(12,12,12,0.9)" stroke="#ffffff" stroke-width="1"/>' +
+            '<text x="118" y="-16" font-family="monospace" font-size="8.5" font-weight="700" fill="#ffffff">MUTATION: RESISTANCE +</text>' +
           '</g>' +
           '<text x="24" y="' + (h - 22) + '" font-family="monospace" font-size="9" fill="' + accent + '">GENOMIC SEQUENCE ANALYSIS // A-T C-G VARIANT</text>' +
           '<text x="' + (w - 140) + '" y="28" font-family="monospace" font-size="9" fill="rgba(255,255,255,0.4)">ANTIBIOTIC RISK: HIGH</text>';
@@ -190,7 +190,7 @@
             '<circle cx="0" cy="5" r="75" fill="none" stroke="' + accent + '" stroke-width="1" stroke-dasharray="8 6" opacity="0.4"/>' +
           '</g>' +
           '<g transform="translate(24, ' + (h - 26) + ')">' +
-            '<rect x="0" y="-12" width="140" height="18" rx="4" fill="rgba(10,12,18,0.9)" stroke="' + accent + '" stroke-width="1"/>' +
+            '<rect x="0" y="-12" width="140" height="18" rx="4" fill="rgba(12,12,12,0.9)" stroke="' + accent + '" stroke-width="1"/>' +
             '<text x="8" y="1" font-family="monospace" font-size="9" font-weight="700" fill="' + accent + '">RISK SCORE: 98.2% FRAUD</text>' +
           '</g>' +
           '<text x="' + (w - 180) + '" y="28" font-family="monospace" font-size="9" fill="rgba(255,255,255,0.4)">URL ENTROPY SCAN: COMPLETE</text>';
@@ -221,8 +221,8 @@
             '<path d="M 20 0 L 140 0 L 160 -35 L 175 40 L 190 -18 L 205 12 L 215 0 L 380 0 L 400 -30 L 415 35 L 430 -12 L 440 0 L ' + (w - 20) + ' 0" fill="none" stroke="' + accent + '" stroke-width="2" filter="url(#glow-' + num + ')"/>' +
           '</g>' +
           '<g transform="translate(' + (w*0.5 - 75) + ', 22)">' +
-            '<rect x="0" y="0" width="150" height="22" rx="6" fill="rgba(10,12,18,0.85)" stroke="' + accent + '" stroke-width="1"/>' +
-            '<circle cx="12" cy="11" r="4" fill="#10b981"/>' +
+            '<rect x="0" y="0" width="150" height="22" rx="6" fill="rgba(12,12,12,0.85)" stroke="' + accent + '" stroke-width="1"/>' +
+            '<circle cx="12" cy="11" r="4" fill="#ffffff"/>' +
             '<text x="22" y="15" font-family="monospace" font-size="9" font-weight="700" fill="#fff">DIAGNOSTIC SCREENING: 96.4%</text>' +
           '</g>' +
           '<text x="24" y="' + (h - 22) + '" font-family="monospace" font-size="9" fill="' + accent + '">CLINICAL BIOMARKER MATRIX // ENSEMBLE DL</text>';
@@ -290,7 +290,7 @@
           '<!-- Real-Time Clinic Pipeline & WebSocket Event Bus -->' +
           '<g transform="translate(' + (w*0.5 - 130) + ', ' + (h*0.5 - 30) + ')">' +
             '<!-- Patient Step 1 -->' +
-            '<rect x="0" y="10" width="70" height="40" rx="8" fill="rgba(10,12,18,0.85)" stroke="' + accent + '" stroke-width="1.5"/>' +
+            '<rect x="0" y="10" width="70" height="40" rx="8" fill="rgba(12,12,12,0.85)" stroke="' + accent + '" stroke-width="1.5"/>' +
             '<text x="14" y="27" font-family="monospace" font-size="9" font-weight="700" fill="#fff">PATIENT</text>' +
             '<text x="12" y="39" font-family="monospace" font-size="8" fill="' + accent + '">PORTAL</text>' +
             '<!-- Connector -->' +
@@ -301,9 +301,9 @@
             '<!-- Connector -->' +
             '<line x1="140" y1="30" x2="170" y2="30" stroke="' + accent + '" stroke-width="2" stroke-dasharray="3 3"/>' +
             '<!-- Doctor Step 3 -->' +
-            '<rect x="170" y="10" width="80" height="40" rx="8" fill="rgba(10,12,18,0.85)" stroke="' + accent + '" stroke-width="1.5"/>' +
+            '<rect x="170" y="10" width="80" height="40" rx="8" fill="rgba(12,12,12,0.85)" stroke="' + accent + '" stroke-width="1.5"/>' +
             '<text x="182" y="27" font-family="monospace" font-size="9" font-weight="700" fill="#fff">DOCTOR</text>' +
-            '<text x="180" y="39" font-family="monospace" font-size="8" fill="#10b981">LIVE QUEUE</text>' +
+            '<text x="180" y="39" font-family="monospace" font-size="8" fill="#ffffff">LIVE QUEUE</text>' +
           '</g>' +
           '<text x="24" y="' + (h - 22) + '" font-family="monospace" font-size="9" fill="' + accent + '">SOCKET.IO BI-DIRECTIONAL // 0 DOUBLE-BOOKINGS</text>' +
           '<text x="' + (w - 170) + '" y="28" font-family="monospace" font-size="9" fill="rgba(255,255,255,0.4)">DEPARTMENT STATUS: OK</text>';
@@ -321,8 +321,8 @@
             '<circle cx="120" cy="60" r="4" fill="' + accent + '"/>' +
             '<circle cx="200" cy="20" r="6" fill="' + accent + '" filter="url(#glow-' + num + ')"/>' +
             '<!-- Risk Zone Avoided -->' +
-            '<circle cx="160" cy="70" r="14" fill="rgba(239,68,68,0.25)" stroke="#ef4444" stroke-width="1.2" stroke-dasharray="3 3"/>' +
-            '<text x="153" y="73" font-family="monospace" font-size="7" fill="#ef4444">HAZARD</text>' +
+            '<circle cx="160" cy="70" r="14" fill="rgba(255,255,255,0.15)" stroke="#ffffff" stroke-width="1.2" stroke-dasharray="3 3"/>' +
+            '<text x="153" y="73" font-family="monospace" font-size="7" fill="#ffffff">HAZARD</text>' +
           '</g>' +
           '<text x="24" y="' + (h - 22) + '" font-family="monospace" font-size="9" fill="' + accent + '">SAFE CORRIDOR SCORING // GPS TELEMETRY ACTIVE</text>' +
           '<text x="' + (w - 150) + '" y="28" font-family="monospace" font-size="9" fill="rgba(255,255,255,0.4)">EMERGENCY SOS: ARMED</text>';
@@ -332,7 +332,7 @@
         svgContent =
           '<!-- Institutional Portal Wireframe Architecture -->' +
           '<g transform="translate(' + (w*0.5 - 110) + ', ' + (h*0.5 - 40) + ')">' +
-            '<rect x="0" y="0" width="220" height="85" rx="8" fill="rgba(10,12,18,0.85)" stroke="' + accent + '" stroke-width="1.5"/>' +
+            '<rect x="0" y="0" width="220" height="85" rx="8" fill="rgba(12,12,12,0.85)" stroke="' + accent + '" stroke-width="1.5"/>' +
             '<line x1="0" y1="20" x2="220" y2="20" stroke="' + accent + '" stroke-width="1"/>' +
             '<circle cx="12" cy="10" r="3" fill="' + accent + '"/>' +
             '<circle cx="22" cy="10" r="3" fill="#fff"/>' +
@@ -372,11 +372,11 @@
           '<!-- Android Phone Blueprint & Inventory SKU Matrix -->' +
           '<g transform="translate(' + (w*0.5 - 75) + ', ' + (h*0.5 - 48) + ')">' +
             '<!-- Phone Chassis -->' +
-            '<rect x="0" y="0" width="55" height="96" rx="8" fill="rgba(10,12,18,0.85)" stroke="' + accent + '" stroke-width="1.5"/>' +
+            '<rect x="0" y="0" width="55" height="96" rx="8" fill="rgba(12,12,12,0.85)" stroke="' + accent + '" stroke-width="1.5"/>' +
             '<circle cx="27" cy="8" r="2.5" fill="' + accent + '"/>' +
             '<rect x="6" y="16" width="43" height="66" rx="3" fill="color-mix(in srgb, ' + accent + ' 10%, transparent)"/>' +
             '<!-- Laser Barcode Line -->' +
-            '<line x1="2" y1="48" x2="53" y2="48" stroke="#ef4444" stroke-width="1.5" filter="url(#glow-' + num + ')"/>' +
+            '<line x1="2" y1="48" x2="53" y2="48" stroke="#ffffff" stroke-width="1.5" filter="url(#glow-' + num + ')"/>' +
             '<!-- Inventory Stock Chart next to device -->' +
             '<g transform="translate(75, 10)">' +
               '<rect x="0" y="0" width="75" height="14" rx="3" fill="rgba(255,255,255,0.06)"/>' +
@@ -404,11 +404,11 @@
             '<text x="0" y="18" text-anchor="middle" font-family="monospace" font-size="7.5" fill="' + accent + '">CO2 REDUCED</text>' +
             '<!-- Sensors Nodes -->' +
             '<g transform="translate(-75, -20)">' +
-              '<circle cx="0" cy="0" r="12" fill="rgba(10,12,18,0.8)" stroke="' + accent + '" stroke-width="1"/>' +
+              '<circle cx="0" cy="0" r="12" fill="rgba(12,12,12,0.8)" stroke="' + accent + '" stroke-width="1"/>' +
               '<text x="-9" y="3" font-family="monospace" font-size="7" fill="' + accent + '">kWh</text>' +
             '</g>' +
             '<g transform="translate(75, -20)">' +
-              '<circle cx="0" cy="0" r="12" fill="rgba(10,12,18,0.8)" stroke="' + accent + '" stroke-width="1"/>' +
+              '<circle cx="0" cy="0" r="12" fill="rgba(12,12,12,0.8)" stroke="' + accent + '" stroke-width="1"/>' +
               '<text x="-9" y="3" font-family="monospace" font-size="7" fill="' + accent + '">H2O</text>' +
             '</g>' +
           '</g>' +
