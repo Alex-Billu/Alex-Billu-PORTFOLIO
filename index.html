@@ -215,12 +215,25 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:30;opa
 .hud{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));font:12px/1.55 var(--mono);color:var(--muted);background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:10px;z-index:6;pointer-events:none}
 @media(max-width:1100px){.hud{display:none}}
 .rain{position:fixed;inset:0;width:100%;height:100%;z-index:45;pointer-events:none;transition:opacity .6s}
-.boot{position:fixed;inset:0;z-index:9999;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1);cursor:pointer}
-.hello-svg{width:min(520px,85vw);height:auto;overflow:visible}
-.hello-stroke{stroke-dasharray:1800;stroke-dashoffset:1800;animation:drawHello 2.4s cubic-bezier(.45,0,.15,1) forwards}
+/* Premium iPhone-optimized Hello Intro */
+.boot{position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;height:100dvh;z-index:99999;background:#000000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:max(env(safe-area-inset-top,0px),20px) max(env(safe-area-inset-right,0px),16px) max(env(safe-area-inset-bottom,0px),24px) max(env(safe-area-inset-left,0px),16px);box-sizing:border-box;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;cursor:pointer;transition:opacity .75s cubic-bezier(.16,1,.3,1),transform .75s cubic-bezier(.16,1,.3,1)}
+.hello-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:100%;transform:translateZ(0)}
+.hello-svg{width:min(320px,76vw);max-height:36dvh;height:auto;display:block;margin:0 auto;overflow:visible;filter:drop-shadow(0 0 10px rgba(255,255,255,.32))}
+.hello-stroke{stroke-dasharray:1000;stroke-dashoffset:1000;animation:drawHello 2s cubic-bezier(.42,0,.25,1) forwards}
 @keyframes drawHello{to{stroke-dashoffset:0}}
-.hello-sub{margin-top:24px;font-family:var(--mono);font-size:13px;color:rgba(255,255,255,.45);letter-spacing:.15em;text-transform:uppercase;opacity:0;animation:fadeInSub .8s ease forwards 2.1s}
+.hello-sub{margin-top:20px;font-family:var(--mono);font-size:12px;font-weight:400;color:rgba(255,255,255,.42);letter-spacing:.14em;text-transform:uppercase;text-align:center;opacity:0;animation:fadeInSub .8s ease forwards 1.6s}
 @keyframes fadeInSub{to{opacity:1}}
+.hello-skip{position:absolute;bottom:max(calc(env(safe-area-inset-bottom,0px) + 24px),24px);left:0;right:0;text-align:center;font-family:var(--mono);font-size:11px;font-weight:300;color:rgba(255,255,255,.38);letter-spacing:.1em;text-transform:lowercase;pointer-events:none;opacity:0;animation:fadeInSkip .9s ease forwards .8s}
+@keyframes fadeInSkip{to{opacity:1}}
+@media(min-width:768px) and (min-height:501px){
+  .hello-svg{width:min(480px,55vw);max-height:45vh}
+  .hello-sub{font-size:13px;margin-top:24px}
+}
+@media(max-height:500px){
+  .hello-svg{width:min(280px,50vw);max-height:48dvh}
+  .hello-sub{margin-top:10px;font-size:11px}
+  .hello-skip{bottom:max(calc(env(safe-area-inset-bottom,0px) + 10px),10px)}
+}
 
 /* photo portrait */
 .photo-wrap{position:relative;display:inline-flex;flex-shrink:0;align-items:center;justify-content:center}
@@ -911,18 +924,57 @@ function hudUp(){var h=document.documentElement.scrollHeight-innerHeight,p=h>0?M
 setInterval(hudUp,500);hudUp();
 function boot(cb){
   if(RM){cb();return}
-  var o=document.createElement("div");o.className="boot";o.setAttribute("aria-hidden","true");
-  o.innerHTML='<svg viewBox="0 0 500 200" class="hello-svg" aria-label="hello"><defs><filter id="hello-glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path class="hello-stroke" d="M 60 145 C 60 145, 95 35, 102 35 C 108 35, 88 145, 88 145 C 88 145, 102 100, 125 100 C 145 100, 138 145, 138 145 C 138 145, 155 108, 172 108 C 185 108, 165 145, 192 145 C 192 145, 222 35, 230 35 C 237 35, 217 145, 242 145 C 242 145, 272 35, 280 35 C 287 35, 267 145, 292 145 C 292 145, 312 108, 332 108 C 352 108, 352 145, 332 145 C 312 145, 312 108, 338 108 C 360 108, 385 125, 420 120" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" filter="url(#hello-glow)"/></svg><div class="hello-sub">Alex S &bull; AI Engineer &amp; Full Stack Developer</div><small style="margin-top:28px;color:#777;font-size:12px;letter-spacing:0.05em">tap anywhere to skip</small>';
+  var prevHtmlOverflow=document.documentElement.style.overflow;
+  var prevBodyOverflow=document.body.style.overflow;
+  document.documentElement.style.overflow="hidden";
+  document.body.style.overflow="hidden";
+
+  var o=document.createElement("div");
+  o.className="boot";
+  o.setAttribute("role","dialog");
+  o.setAttribute("aria-label","Welcome introduction");
+
+  o.innerHTML='<div class="hello-wrap">' +
+    '<svg viewBox="0 0 500 200" class="hello-svg" aria-label="hello" preserveAspectRatio="xMidYMid meet">' +
+      '<defs>' +
+        '<filter id="hello-glow" x="-20%" y="-20%" width="140%" height="140%">' +
+          '<feGaussianBlur stdDeviation="3.5" result="blur"/>' +
+          '<feMerge>' +
+            '<feMergeNode in="blur"/>' +
+            '<feMergeNode in="SourceGraphic"/>' +
+          '</feMerge>' +
+        '</filter>' +
+      '</defs>' +
+      '<path class="hello-stroke" pathLength="1000" d="M 60 145 C 60 145, 95 35, 102 35 C 108 35, 88 145, 88 145 C 88 145, 102 100, 125 100 C 145 100, 138 145, 138 145 C 138 145, 155 108, 172 108 C 185 108, 165 145, 192 145 C 192 145, 222 35, 230 35 C 237 35, 217 145, 242 145 C 242 145, 272 35, 280 35 C 287 35, 267 145, 292 145 C 292 145, 312 108, 332 108 C 352 108, 352 145, 332 145 C 312 145, 312 108, 338 108 C 360 108, 385 125, 420 120" fill="none" stroke="#ffffff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#hello-glow)"/>' +
+    '</svg>' +
+    '<div class="hello-sub">Alex S &bull; AI Engineer &amp; Full Stack Developer</div>' +
+  '</div>' +
+  '<div class="hello-skip">tap anywhere to skip</div>';
+
   document.body.appendChild(o);
+
+  var preventScroll=function(e){e.preventDefault()};
+  o.addEventListener("touchmove",preventScroll,{passive:false});
+
   var done=false;
   function fin(){
-    if(done)return;done=true;cb();
-    o.style.opacity="0";o.style.transform="scale(1.05)";
-    setTimeout(function(){if(o.parentNode)o.remove()},800);
+    if(done)return;
+    done=true;
+    document.documentElement.style.overflow=prevHtmlOverflow;
+    document.body.style.overflow=prevBodyOverflow;
+    o.removeEventListener("touchmove",preventScroll);
+    cb();
+    o.style.opacity="0";
+    o.style.transform="scale(1.02)";
+    setTimeout(function(){
+      if(o.parentNode)o.remove();
+    },750);
   }
+
   o.addEventListener("click",fin);
+  o.addEventListener("touchend",fin);
   addEventListener("keydown",fin,{once:true});
-  setTimeout(fin,3400);
+  setTimeout(fin,3100);
 }
 
 var RESUMES={
