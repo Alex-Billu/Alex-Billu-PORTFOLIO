@@ -29,6 +29,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--body
 #bg-video{position:fixed;inset:0;top:0;left:0;width:100vw;height:100vh;object-fit:cover;object-position:center;z-index:0;pointer-events:none;opacity:0;visibility:hidden}
 body.video-mode #bg-video{opacity:1;visibility:visible}
 body.video-mode #yinyang-canvas{opacity:0 !important;visibility:hidden !important;pointer-events:none !important}
+body.video-mode .photo-wrap{display:none !important;opacity:0 !important;visibility:hidden !important;pointer-events:none !important}
 @supports not (view-transition-name: root){
   #bg-video,#yinyang-canvas{transition:opacity .6s cubic-bezier(.16,1,.3,1),visibility .6s cubic-bezier(.16,1,.3,1)}
 }
@@ -1114,6 +1115,7 @@ function toggleBackgroundMode(){
   }else{
     if(bgVideo){
       bgVideo.pause();
+      bgVideo.currentTime=0;
     }
   }
 }
