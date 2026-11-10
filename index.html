@@ -215,23 +215,26 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:30;opa
 .hud{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));font:12px/1.55 var(--mono);color:var(--muted);background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:10px;z-index:6;pointer-events:none}
 @media(max-width:1100px){.hud{display:none}}
 .rain{position:fixed;inset:0;width:100%;height:100%;z-index:45;pointer-events:none;transition:opacity .6s}
-/* Premium iPhone-optimized Hello Intro */
-.boot{position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;height:100dvh;z-index:99999;background:#000000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:max(env(safe-area-inset-top,0px),20px) max(env(safe-area-inset-right,0px),16px) max(env(safe-area-inset-bottom,0px),24px) max(env(safe-area-inset-left,0px),16px);box-sizing:border-box;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;cursor:pointer;transition:opacity .75s cubic-bezier(.16,1,.3,1),transform .75s cubic-bezier(.16,1,.3,1)}
-.hello-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:100%;transform:translateZ(0)}
-.hello-svg{width:min(320px,76vw);max-height:36dvh;height:auto;display:block;margin:0 auto;overflow:visible;filter:drop-shadow(0 0 10px rgba(255,255,255,.32))}
-.hello-stroke{stroke-dasharray:1000;stroke-dashoffset:1000;animation:drawHello 2s cubic-bezier(.42,0,.25,1) forwards}
-@keyframes drawHello{to{stroke-dashoffset:0}}
-.hello-sub{margin-top:20px;font-family:var(--mono);font-size:12px;font-weight:400;color:rgba(255,255,255,.42);letter-spacing:.14em;text-transform:uppercase;text-align:center;opacity:0;animation:fadeInSub .8s ease forwards 1.6s}
-@keyframes fadeInSub{to{opacity:1}}
-.hello-skip{position:absolute;bottom:max(calc(env(safe-area-inset-bottom,0px) + 24px),24px);left:0;right:0;text-align:center;font-family:var(--mono);font-size:11px;font-weight:300;color:rgba(255,255,255,.38);letter-spacing:.1em;text-transform:lowercase;pointer-events:none;opacity:0;animation:fadeInSkip .9s ease forwards .8s}
+/* Editorial Cinematic Intro */
+.boot{position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;height:100dvh;z-index:99999;background-color:#000000;background-image:radial-gradient(ellipse 70% 55% at 50% 43%,rgba(255,255,255,0.045) 0%,rgba(255,255,255,0.01) 45%,rgba(0,0,0,0) 75%),url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");display:flex;flex-direction:column;align-items:center;justify-content:center;padding:max(env(safe-area-inset-top,0px),24px) max(env(safe-area-inset-right,0px),20px) max(env(safe-area-inset-bottom,0px),28px) max(env(safe-area-inset-left,0px),20px);box-sizing:border-box;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;cursor:pointer;transition:opacity .8s cubic-bezier(.16,1,.3,1)}
+.hello-stage{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:100%;transform:translateY(-5vh);transition:transform .8s cubic-bezier(.16,1,.3,1)}
+.hello-stage.settled{transform:translateY(calc(-5vh - 8px))}
+.hello-svg{width:min(310px,74vw);max-height:32dvh;height:auto;display:block;margin:0 auto;overflow:visible}
+.hello-stroke{stroke:#ffffff;stroke-width:3.8;stroke-linecap:round;stroke-linejoin:round;fill:none;will-change:stroke-dashoffset}
+.hello-sub{margin-top:18px;font-family:var(--mono,'JetBrains Mono',monospace);font-size:11px;font-weight:500;color:rgba(255,255,255,.45);letter-spacing:.22em;text-transform:uppercase;text-align:center;opacity:0;transform:translateY(8px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1);will-change:opacity,transform}
+.hello-stage.settled .hello-sub{opacity:1;transform:translateY(0)}
+.hello-skip{position:absolute;bottom:max(calc(env(safe-area-inset-bottom,0px) + 24px),24px);left:0;right:0;text-align:center;font-family:var(--mono,'JetBrains Mono',monospace);font-size:11px;font-weight:300;color:rgba(255,255,255,.28);letter-spacing:.12em;text-transform:lowercase;pointer-events:none;opacity:0;animation:fadeInSkip 1s ease forwards .8s}
 @keyframes fadeInSkip{to{opacity:1}}
 @media(min-width:768px) and (min-height:501px){
-  .hello-svg{width:min(480px,55vw);max-height:45vh}
-  .hello-sub{font-size:13px;margin-top:24px}
+  .hello-svg{width:min(440px,46vw);max-height:42vh}
+  .hello-stroke{stroke-width:3.5}
+  .hello-sub{font-size:12px;margin-top:22px;letter-spacing:.25em}
 }
 @media(max-height:500px){
-  .hello-svg{width:min(280px,50vw);max-height:48dvh}
-  .hello-sub{margin-top:10px;font-size:11px}
+  .hello-stage{transform:translateY(-2vh)}
+  .hello-stage.settled{transform:translateY(calc(-2vh - 6px))}
+  .hello-svg{width:min(260px,45vw);max-height:44dvh}
+  .hello-sub{font-size:10px;margin-top:8px}
   .hello-skip{bottom:max(calc(env(safe-area-inset-bottom,0px) + 10px),10px)}
 }
 
@@ -932,49 +935,113 @@ function boot(cb){
   var o=document.createElement("div");
   o.className="boot";
   o.setAttribute("role","dialog");
-  o.setAttribute("aria-label","Welcome introduction");
+  o.setAttribute("aria-label","Welcome");
 
-  o.innerHTML='<div class="hello-wrap">' +
-    '<svg viewBox="0 0 500 200" class="hello-svg" aria-label="hello" preserveAspectRatio="xMidYMid meet">' +
+  o.innerHTML='<div class="hello-stage" id="hello-stage">' +
+    '<svg viewBox="0 0 500 200" class="hello-svg" aria-label="Hello" preserveAspectRatio="xMidYMid meet">' +
       '<defs>' +
-        '<filter id="hello-glow" x="-20%" y="-20%" width="140%" height="140%">' +
-          '<feGaussianBlur stdDeviation="3.5" result="blur"/>' +
+        '<filter id="pen-glow" x="-100%" y="-100%" width="300%" height="300%">' +
+          '<feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur"/>' +
           '<feMerge>' +
             '<feMergeNode in="blur"/>' +
             '<feMergeNode in="SourceGraphic"/>' +
           '</feMerge>' +
         '</filter>' +
       '</defs>' +
-      '<path class="hello-stroke" pathLength="1000" d="M 60 145 C 60 145, 95 35, 102 35 C 108 35, 88 145, 88 145 C 88 145, 102 100, 125 100 C 145 100, 138 145, 138 145 C 138 145, 155 108, 172 108 C 185 108, 165 145, 192 145 C 192 145, 222 35, 230 35 C 237 35, 217 145, 242 145 C 242 145, 272 35, 280 35 C 287 35, 267 145, 292 145 C 292 145, 312 108, 332 108 C 352 108, 352 145, 332 145 C 312 145, 312 108, 338 108 C 360 108, 385 125, 420 120" fill="none" stroke="#ffffff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#hello-glow)"/>' +
+      '<path id="hello-path" class="hello-stroke" d="M 60 145 C 60 145, 95 35, 102 35 C 108 35, 88 145, 88 145 C 88 145, 102 100, 125 100 C 145 100, 138 145, 138 145 C 138 145, 155 108, 172 108 C 185 108, 165 145, 192 145 C 192 145, 222 35, 230 35 C 237 35, 217 145, 242 145 C 242 145, 272 35, 280 35 C 287 35, 267 145, 292 145 C 292 145, 312 108, 332 108 C 352 108, 352 145, 332 145 C 312 145, 312 108, 338 108 C 360 108, 385 125, 420 120" fill="none" stroke="#ffffff" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<circle id="pen-tip" cx="60" cy="145" r="2.8" fill="#ffffff" filter="url(#pen-glow)" opacity="0"/>' +
     '</svg>' +
-    '<div class="hello-sub">Alex S &bull; AI Engineer &amp; Full Stack Developer</div>' +
+    '<div class="hello-sub">ALEX S &bull; AI ENGINEER &amp; FULL STACK DEVELOPER</div>' +
   '</div>' +
   '<div class="hello-skip">tap anywhere to skip</div>';
 
   document.body.appendChild(o);
 
+  var path=document.getElementById("hello-path");
+  var penTip=document.getElementById("pen-tip");
+  var stage=document.getElementById("hello-stage");
+
+  var pathLen=1000;
+  if(path&&path.getTotalLength){
+    try{pathLen=path.getTotalLength()}catch(e){}
+  }
+  if(path){
+    path.style.strokeDasharray=pathLen;
+    path.style.strokeDashoffset=pathLen;
+  }
+
   var preventScroll=function(e){e.preventDefault()};
   o.addEventListener("touchmove",preventScroll,{passive:false});
 
   var done=false;
+  var animFrameId=null;
+
   function fin(){
     if(done)return;
     done=true;
+    if(animFrameId)cancelAnimationFrame(animFrameId);
     document.documentElement.style.overflow=prevHtmlOverflow;
     document.body.style.overflow=prevBodyOverflow;
     o.removeEventListener("touchmove",preventScroll);
     cb();
     o.style.opacity="0";
-    o.style.transform="scale(1.02)";
     setTimeout(function(){
       if(o.parentNode)o.remove();
-    },750);
+    },800);
   }
 
   o.addEventListener("click",fin);
   o.addEventListener("touchend",fin);
   addEventListener("keydown",fin,{once:true});
-  setTimeout(fin,3100);
+
+  var startTime=null;
+  var pauseBeforeWrite=350;
+  var writeDuration=1800;
+
+  function easeInOutCubic(t){
+    return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2, 3)/2;
+  }
+
+  function frame(ts){
+    if(done)return;
+    if(!startTime)startTime=ts;
+    var elapsed=ts-startTime;
+
+    if(elapsed<pauseBeforeWrite){
+      var pAlpha=Math.min(1, elapsed/pauseBeforeWrite);
+      if(penTip)penTip.style.opacity=pAlpha;
+      animFrameId=requestAnimationFrame(frame);
+      return;
+    }
+
+    var writeElapsed=elapsed-pauseBeforeWrite;
+    var progress=Math.min(1, writeElapsed/writeDuration);
+    var eased=easeInOutCubic(progress);
+
+    if(path){
+      path.style.strokeDashoffset=pathLen*(1-eased);
+    }
+
+    if(penTip&&path&&path.getPointAtLength){
+      var pt=path.getPointAtLength(eased*pathLen);
+      penTip.setAttribute("cx",pt.x);
+      penTip.setAttribute("cy",pt.y);
+      if(progress>=1){
+        penTip.style.opacity=0;
+      }else{
+        penTip.style.opacity=1;
+      }
+    }
+
+    if(progress<1){
+      animFrameId=requestAnimationFrame(frame);
+    }else{
+      if(stage)stage.classList.add("settled");
+      setTimeout(fin, 1100);
+    }
+  }
+
+  animFrameId=requestAnimationFrame(frame);
 }
 
 var RESUMES={
